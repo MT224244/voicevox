@@ -1,6 +1,33 @@
 import { BrowserWindow, ipcMain, IpcMainInvokeEvent } from "electron";
 import log from "electron-log/main";
-import { IpcMainHandle, IpcMainSend } from "@/type/ipc";
+import { IpcIHData, IpcSOData } from "@/type/ipc";
+
+export type IpcRendererInvoke = {
+  [K in keyof IpcIHData]: (
+    ...args: IpcIHData[K]["args"]
+  ) => Promise<IpcIHData[K]["return"]>;
+};
+
+export type IpcMainHandle = {
+  [K in keyof IpcIHData]: (
+    event: import("electron").IpcMainInvokeEvent,
+    ...args: IpcIHData[K]["args"]
+  ) => Promise<IpcIHData[K]["return"]> | IpcIHData[K]["return"];
+};
+
+export type IpcMainSend = {
+  [K in keyof IpcSOData]: (
+    win: import("electron").BrowserWindow,
+    ...args: IpcSOData[K]["args"]
+  ) => void;
+};
+
+export type IpcRendererOn = {
+  [K in keyof IpcSOData]: (
+    event: import("electron").IpcRendererEvent,
+    ...args: IpcSOData[K]["args"]
+  ) => Promise<IpcSOData[K]["return"]> | IpcSOData[K]["return"];
+};
 
 export function registerIpcMainHandle<T extends IpcMainHandle>(
   listeners: T,

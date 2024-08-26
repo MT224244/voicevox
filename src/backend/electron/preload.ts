@@ -1,7 +1,7 @@
 import { contextBridge, ipcRenderer } from "electron";
 
+import { IpcRendererInvoke } from "./ipc";
 import { Sandbox, ConfigType, EngineId, SandboxKey } from "@/type/preload";
-import { IpcRendererInvoke } from "@/type/ipc";
 
 const ipcRendererInvoke = new Proxy(
   {},
